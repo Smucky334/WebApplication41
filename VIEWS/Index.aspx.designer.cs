@@ -15,13 +15,22 @@ namespace WebApplication41.VIEWS
     {
 
         /// <summary>
-        /// formAgregarProducto control.
+        /// formAgregarJuego control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm formAgregarProducto;
+        protected global::System.Web.UI.HtmlControls.HtmlForm formAgregarJuego;
+
+        /// <summary>
+        /// lblUsuario control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUsuario;
 
         /// <summary>
         /// txtNombre control.
@@ -60,21 +69,21 @@ namespace WebApplication41.VIEWS
         protected global::System.Web.UI.WebControls.FileUpload fileImagen;
 
         /// <summary>
-        /// btnAgregarProducto control.
+        /// btnAgregar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAgregarProducto;
+        protected global::System.Web.UI.WebControls.Button btnAgregar;
 
         /// <summary>
-        /// gvProductos control.
+        /// gvJuegos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvProductos;
+        protected global::System.Web.UI.WebControls.GridView gvJuegos;
     }
 }

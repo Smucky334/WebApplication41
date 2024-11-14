@@ -84,7 +84,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CONTROLLER\AESCryptography.cs" />
-    <Compile Include="CONTROLLER\ControllerBaseDeDatos.cs" />
+    <Compile Include="CONTROLLER\Busqueda de usuario.cs" />
+    <Compile Include="CONTROLLER\ControladorJuegos.cs" />
+    <Compile Include="CONTROLLER\Juego.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

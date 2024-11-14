@@ -105,42 +105,30 @@
 </head>
 <body>
           <div class="main-container">
-        <form id="formAgregarProducto" runat="server" enctype="multipart/form-data" class="container">
-            <div class="welcome-container">
-                <h1>¡Bienvenido!</h1>
-             
-            </div>
-            <h2>Agregar Producto</h2>
-
-            <label for="txtNombre">Nombre:</label>
-            <asp:TextBox ID="txtNombre" runat="server" Required="true" placeholder="Ingrese el nombre"></asp:TextBox>
-
-            <label for="txtCantidad">Cantidad:</label>
-            <asp:TextBox ID="txtCantidad" runat="server" TextMode="Number" Required="true" placeholder="Ingrese la cantidad"></asp:TextBox>
-
-            <label for="txtCosto">Costo:</label>
-            <asp:TextBox ID="txtCosto" runat="server" TextMode="Number" Required="true" placeholder="Ingrese el costo"></asp:TextBox>
-
-            <label for="fileImagen">Imagen:</label>
+        <form id="formAgregarJuego" runat="server" enctype="multipart/form-data" class="container">
+            <p>Usuario: <asp:Label ID="lblUsuario" runat="server" Text=""></asp:Label></p>
+            <h2>Agregar Video Juegos</h2>
+            <label>Título:</label>
+            <asp:TextBox ID="txtNombre" runat="server" placeholder="Nombre del juego"></asp:TextBox>
+            <label>Stock:</label>
+            <asp:TextBox ID="txtCantidad" runat="server" TextMode="Number" placeholder="Cantidad del juego"></asp:TextBox>
+            <label>Costo:</label>
+            <asp:TextBox ID="txtCosto" runat="server" TextMode="Number" placeholder="Precio del juego"></asp:TextBox>
+            <label>Imagen:</label>
             <asp:FileUpload ID="fileImagen" runat="server" />
-
-            <asp:Button ID="btnAgregarProducto" runat="server" Text="Agregar Producto" OnClick="btnAgregarProducto_Click" />
-
-            <div class="grid-container">
-                <!-- GridView para mostrar productos -->
-                <asp:GridView ID="gvProductos" runat="server" AutoGenerateColumns="false" Width="100%" ShowHeaderWhenEmpty="true">
-                    <Columns>
-                        <asp:BoundField DataField="Nombre" HeaderText="Nombre" SortExpression="Nombre" />
-                        <asp:BoundField DataField="Cantidad" HeaderText="Cantidad" SortExpression="Cantidad" />
-                        <asp:BoundField DataField="Precio" HeaderText="Precio" SortExpression="Precio" DataFormatString="{0:C}" />
-                        <asp:TemplateField HeaderText="Imagen">
-                            <ItemTemplate>
-                                <asp:Image ID="imgProducto" runat="server" CssClass="img-responsive" ImageUrl='<%#Eval("ImagenUrl")%>' />
-                            </ItemTemplate>
-                        </asp:TemplateField>
-                    </Columns>
-                </asp:GridView>
-            </div>
+            <asp:Button ID="btnAgregar" runat="server" Text="Añadir Juego" OnClick="btnAgregar_Click" />
+            <asp:GridView ID="gvJuegos" runat="server" AutoGenerateColumns="false">
+                <Columns>
+                    <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
+                    <asp:BoundField DataField="Cantidad" HeaderText="Cantidad" />
+                    <asp:BoundField DataField="Costo" HeaderText="Costo" DataFormatString="{0:C}" />
+                    <asp:TemplateField HeaderText="Imagen">
+                        <ItemTemplate>
+                            <asp:Image ID="imgJuego" runat="server" ImageUrl='<%#Eval("UrlImagen")%>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
         </form>
     </div>
 </body>

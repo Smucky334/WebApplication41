@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WebApplication41.CONTROLLER;
 
 namespace WebApplication41.VIEWS
 {
@@ -17,95 +18,82 @@ namespace WebApplication41.VIEWS
         // Obtener la cadena de conexión desde el archivo de configuración
         // private string connectionString = ConfigurationManager.ConnectionStrings["videojuegosConnectionString"].ConnectionString;
         private string connectionString = ConfigurationManager.ConnectionStrings["examen3pavConnectionString"].ConnectionString;
-
+        //private string connectionString = ConfigurationManager.ConnectionStrings["videojuegospavConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)
         {
-         
+            CargarJuegos();
+            if (Session["UsuarioActual"] != null && Session["UsuarioActual"].ToString() == "jchavarin")
+            {
+                lblUsuario.Text = Session["UsuarioActual"].ToString();
+            }
+            else
+            {
+                Response.Write("<script>alert('Por favor, inicia sesión.'); window.location.href='Login.aspx';</script>");
+                Response.End();
+            }
         }
 
         protected void btnAgregarProducto_Click(object sender, EventArgs e)
         {
             string nombre = txtNombre.Text;
             int cantidad;
-            decimal precio;
+            decimal costo;
+            string urlImagen = null;
 
-            // Validar los campos de cantidad y costo
             if (!int.TryParse(txtCantidad.Text, out cantidad))
             {
-                Response.Write("<script>alert('Por favor ingrese una cantidad válida.');</script>");
+                Response.Write("<script>alert('Cantidad inválida.');</script>");
                 return;
             }
 
-            if (!decimal.TryParse(txtCosto.Text, out precio))
+            if (!decimal.TryParse(txtCosto.Text, out costo))
             {
-                Response.Write("<script>alert('Por favor ingrese un costo válido.');</script>");
+                Response.Write("<script>alert('Costo inválido.');</script>");
                 return;
             }
 
-            // Subir la imagen si existe
-            string imagenUrl = null;
             if (fileImagen.HasFile)
             {
-                string fileName = Path.GetFileName(fileImagen.PostedFile.FileName);
-                string filePath = Server.MapPath("~/Images/") + fileName;
-
+                string nombreArchivo = Path.GetFileName(fileImagen.PostedFile.FileName);
+                string rutaArchivo = Server.MapPath("~/Images/") + nombreArchivo;
                 try
                 {
-                    fileImagen.SaveAs(filePath);
-                    imagenUrl = "~/Images/" + fileName; // Ruta de la imagen
+                    fileImagen.SaveAs(rutaArchivo);
+                    urlImagen = "~/Images/" + nombreArchivo;
                 }
                 catch (Exception ex)
                 {
-                    Response.Write("<script>alert('Error al subir la imagen: " + ex.Message + "');</script>");
+                    Response.Write("<script>alert('Error al cargar la imagen: " + ex.Message + "');</script>");
                     return;
                 }
             }
 
-            // Insertar el producto en la base de datos MySQL
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            ControladorJuegos controlador = new ControladorJuegos();
+            try
             {
-                try
+                bool resultado = controlador.AñadirJuego(nombre, cantidad, (double)costo, urlImagen);
+                if (resultado)
                 {
-                    string query = "INSERT INTO productos (Nombre, Cantidad, Precio, ImagenUrl) VALUES (@Nombre, @Cantidad, @Precio, @ImagenUrl)";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Nombre", nombre);
-                    cmd.Parameters.AddWithValue("@Cantidad", cantidad);
-                    cmd.Parameters.AddWithValue("@Precio", precio);
-                    cmd.Parameters.AddWithValue("@ImagenUrl", imagenUrl ?? (object)DBNull.Value);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-
-                    // Actualizar la GridView con los productos más recientes
-                    CargarProductos();
+                    Response.Write("<script>alert('Juego añadido exitosamente.');</script>");
+                    CargarJuegos();
                 }
-                catch (Exception ex)
+                else
                 {
-                    Response.Write("<script>alert('Error al agregar el producto: " + ex.Message + "');</script>");
+                    Response.Write("<script>alert('Error al añadir el juego.');</script>");
                 }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
             }
         }
 
-        // Método para cargar los productos desde la base de datos y enlazarlos a la GridView
-        private void CargarProductos()
+        private void CargarJuegos()
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    string query = "SELECT * FROM productos";
-                    MySqlDataAdapter da = new MySqlDataAdapter(query, conn);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-
-                    gvProductos.DataSource = dt;
-                    gvProductos.DataBind();
-                }
-                catch (Exception ex)
-                {
-                    Response.Write("<script>alert('Error al cargar los productos: " + ex.Message + "');</script>");
-                }
-            }
+            ControladorJuegos controlador = new ControladorJuegos();
+            var inventario = controlador.ObtenerInventario();
+            gvJuegos.DataSource = inventario;
+            gvJuegos.DataBind();
         }
     }
 }
